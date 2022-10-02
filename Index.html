@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <title>Assignment 3 - Bellatrix Salungweni</title>
+</head>
+<body class="bg-dark">
+    <h1 class="text-center text-light mt-3">Covid 19</h1>
+
+
+    <form action="" id="myform">
+      <div class="container text-center">
+        <div id="myform" class="row justify-content-center mt-3">
+          <div class="col ">
+            <input type="text" class="form-control " id="inputnegara" placeholder="masukan nama negara" required aria-label="Username" aria-describedby="basic-addon1">
+          </div>
+          <div class="col">
+            <input type="date" class="form-control " id="inputtanggal" placeholder="masukan tanggal" required aria-label="Username" aria-describedby="basic-addon1">
+          </div>
+        </div>
+      </div>
+        <div class="text-center mt-3">
+          <input class="btn" style="background-color: #ECB365;" type="submit" value="Lihat hasil">
+      </div>    
+  </form>
+
+  <h1 class="text-center text-light mt-3"id="negara"></h1>
+  <h3 class="text-center text-light mt-3" id="tanggal"></h3>
+
+
+  <div class="container">
+    <div class="row mt-3">
+        <div class="col-md-4 order-1 d-flex flex-column justify-content-center text-center">
+            <div class="card" style="background-color: #F8DF8B;">
+                <img src="images\covid.png" class=" card-img-top mx-auto w-25" alt="HTML" >
+                <div class="card-body">
+                  <h5 class="card-title text-danger">Active cases</h5>
+                  <h3 class="card-text fw-bold" id="active"></h3>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-4 mt-1 order-2 d-flex flex-column  justify-content-center text-center">
+            <div class="card" style="background-color: #F8DF8B;" >
+                <img src="images\covid.png" class=" card-img-top mx-auto w-25" alt="HTML" >
+                <div class="card-body">
+                  <h5 class="card-title text-danger ">New cases</h5>
+                  <h3 class="card-text fw-bold" id="new"></h3>
+                </div>
+              </div>              
+        </div>
+        <div class="col-md-4 mt-1 order-3 d-flex flex-column justify-content-center text-center">
+            <div class="card" style="background-color: #F8DF8B;">
+                <img src="images\covid.png" class=" card-img-top mx-auto w-25" alt="HTML" >
+                <div class="card-body">
+                  <h5 class="card-title text-danger ">Recovered cases</h5>
+                  <h3 class="card-text fw-bold" id="recovered"></h3>
+                </div>
+              </div>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col-md-4 order-1 d-flex flex-column justify-content-center text-center">
+            <div class="card" style="background-color: #F8DF8B;">
+                <img src="images\covid.png" class=" card-img-top mx-auto w-25" alt="HTML" >
+                <div class="card-body">
+                  <h5 class="card-title text-danger ">Total cases</h5>
+                  <h3 class="card-text fw-bold" id="total"></h3>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-4 mt-1 order-2 d-flex flex-column justify-content-center text-center" >
+            <div class="card" style="background-color: #F8DF8B;">
+                <img src="images\covid.png" class=" card-img-top mx-auto w-25" alt="HTML" >
+                <div class="card-body">
+                  <h5 class="card-title text-danger ">Total deaths</h5>
+                  <h3 class="card-text fw-bold" id="deaths"></h3>
+                </div>
+              </div>              
+        </div>
+        <div class="col-md-4 mt-1 order-3 d-flex flex-column justify-content-center text-center">
+            <div class="card" style="background-color: #F8DF8B;">
+                <img src="images\covid.png" class=" card-img-top mx-auto w-25" alt="HTML" >
+                <div class="card-body">
+                  <h5 class="card-title text-danger ">Total tests</h5>
+                  <h3 class="card-text fw-bold" id="tests"></h3>
+                </div>
+              </div>
+        </div>
+    </div>
+  </div>
+    
+
+    <script>
+      var negara = 'Indonesia';
+      let currentDate = new Date();
+      let cDay = '0'+currentDate.getDate()
+      let cMonth = currentDate.getMonth() + 1
+      let cYear = currentDate.getFullYear()
+      var tanggal = (cYear+'-'+cMonth+'-'+cDay)
+
+      const options = {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': ' ',
+          'X-RapidAPI-Host': 'covid-193.p.rapidapi.com'}};
+      
+          fetch(`https://covid-193.p.rapidapi.com/history?country=${negara}&day=${tanggal}`, options)	        
+          .then(res => res.json())
+	        .then((response) =>{
+                    document.getElementById('negara').innerHTML = response.parameters.country
+                    document.getElementById('tanggal').innerHTML = response.parameters.day
+                    document.getElementById('active').innerHTML = response.response[0].cases.active
+                    document.getElementById('new').innerHTML = response.response[0].cases.new
+                    document.getElementById('recovered').innerHTML = response.response[0].cases.recovered
+                    document.getElementById('total').innerHTML = response.response[0].cases.total
+                    document.getElementById('active').innerHTML = response.response[0].cases.active
+                    document.getElementById('deaths').innerHTML = response.response[0].deaths.total
+                    document.getElementById('tests').innerHTML = response.response[0].tests.total
+          })
+        .catch(err => console.error(err));
+
+      var myForm = document.getElementById('myform')
+      myForm.addEventListener('submit', function(event){
+        event.preventDefault()
+        var inputNegara = document.getElementById('inputnegara').value
+        var inputTanggal = document.getElementById('inputtanggal').value
+        fetch(`https://covid-193.p.rapidapi.com/history?country=${inputNegara}&day=${inputTanggal}`, options)	        
+            .then(res => res.json())
+	        .then((response) =>{
+                if (response.response == 0){
+                    alert("Masukan nama negara yang benar")
+                }else{
+                    document.getElementById('negara').innerHTML = response.parameters.country
+                    document.getElementById('tanggal').innerHTML = response.parameters.day
+                    document.getElementById('active').innerHTML = response.response[0].cases.active
+                    document.getElementById('new').innerHTML = response.response[0].cases.new
+                    document.getElementById('recovered').innerHTML = response.response[0].cases.recovered
+                    document.getElementById('total').innerHTML = response.response[0].cases.total
+                    document.getElementById('active').innerHTML = response.response[0].cases.active
+                    document.getElementById('deaths').innerHTML = response.response[0].deaths.total
+                    document.getElementById('tests').innerHTML = response.response[0].tests.total
+      }})
+        .catch(err => console.error(err));
+      })
+    </script>
+</body>
+</html>
